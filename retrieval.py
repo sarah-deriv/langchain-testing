@@ -40,3 +40,13 @@ print(docs_ss[1].page_content[:100])
 docs_mmr = vectordb.max_marginal_relevance_search(question,k=3)
 print(docs_mmr[0].page_content[:100])
 print(docs_mmr[1].page_content[:100])
+
+# Addressing Specificity: working with metadata
+question = "who are the stakeholders of project zero spread?"
+docs = vectordb.similarity_search(
+    question,
+    k=3,
+    filter={"source":"PDF-docs/Engineering4.pdf"}
+)
+for d in docs:
+    print(d.metadata)
