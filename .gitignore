@@ -173,6 +173,7 @@ cython_debug/
 
 # File inventory:
 PDF-docs/
+docs/
 
 #extra files
 .DS_Store
