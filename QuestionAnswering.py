@@ -22,7 +22,7 @@ vectordb = Chroma(
 )
 print(vectordb._collection.count())
 
-question = "What are major topics for this class?"
+question = "What is a swap-free accounts?"
 docs = vectordb.similarity_search(question,k=3)
 len(docs)
 
@@ -35,7 +35,7 @@ qa_chain = RetrievalQA.from_chain_type(
     retriever=vectordb.as_retriever()
 )
 result = qa_chain.invoke({"query": question})
-print("\nAnswer:", result["result"])
+# print("\nAnswer:", result["result"])
 
 # ================================
 
@@ -56,7 +56,15 @@ qa_chain = RetrievalQA.from_chain_type(
     chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
 )
 
-question = "what are the kyc types"
 result = qa_chain.invoke({"query": question})
+# print(result["result"])
+# print(result["source_documents"][0])
+
+#================use refine=====================
+qa_chain_mr = RetrievalQA.from_chain_type(
+    llm,
+    retriever=vectordb.as_retriever(),
+    chain_type="refine"
+)
+result = qa_chain_mr.invoke({"query": question})
 print(result["result"])
-print(result["source_documents"][0])
