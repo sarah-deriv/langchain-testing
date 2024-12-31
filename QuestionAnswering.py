@@ -60,7 +60,9 @@ result = qa_chain.invoke({"query": question})
 # print(result["result"])
 # print(result["source_documents"][0])
 
-#================use refine=====================
+#================use chain_type=====================
+# chain_type : [map_reduce, refine]
+#===================================================
 qa_chain_mr = RetrievalQA.from_chain_type(
     llm,
     retriever=vectordb.as_retriever(),
