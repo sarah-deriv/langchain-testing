@@ -24,15 +24,23 @@ This repository contains a collection of Python scripts demonstrating various fu
 
 ```
 langchain-testing/
-├── QuestionAnswering.py    # Main question answering implementation
-├── ReadFromPdf.py         # PDF document processing with text splitting
-├── ReadFromYoutube.py     # YouTube transcript extraction
-├── retrieval.py           # Document retrieval implementation
-├── selfQueryRetriever.py  # Self-query retrieval system
-├── vectore_store.py       # Vector store implementation
-├── PDF-docs/              # Directory for PDF documents
-└── docs/                  # Directory for ChromaDB persistence
-    └── chroma/           # ChromaDB storage
+├── chat.py                # Main chat interface
+├── retrieval.py          # Document retrieval implementation
+├── selfQueryRetriever.py # Self-query retrieval system
+├── examples/            # Example implementations
+│   ├── pdf_example.py    # PDF processing example
+│   ├── qa_example.py     # Question answering example
+│   ├── vector_store_example.py  # Vector store usage
+│   └── youtube_example.py # YouTube processing example
+├── library/             # Core functionality modules
+│   ├── pdf_processor.py   # PDF processing utilities
+│   ├── qa_processor.py    # QA system implementation
+│   ├── utils.py          # Common utilities
+│   ├── vector_store_processor.py # Vector store operations
+│   └── youtube_processor.py # YouTube processing utilities
+├── PDF-docs/            # Directory for PDF documents
+└── docs/               # Directory for ChromaDB persistence
+    └── chroma/        # ChromaDB storage
 ```
 
 ## Setup
@@ -49,37 +57,39 @@ langchain-testing/
 
 ## Usage
 
+### Main Chat Interface
+```python
+# Use the main chat interface
+python chat.py
+```
+
 ### PDF Processing
 ```python
-# Load and process PDF documents
-from langchain_community.document_loaders import PyPDFLoader
-loader = PyPDFLoader("PDF-docs/your_document.pdf")
-pages = loader.load()
+# Example of PDF document processing
+from library.pdf_processor import process_pdf
+docs = process_pdf("PDF-docs/your_document.pdf")
 ```
 
 ### YouTube Transcript Processing
 ```python
-# Extract transcripts from YouTube videos
-from langchain_community.document_loaders import YoutubeLoader
-loader = YoutubeLoader.from_youtube_url("your_youtube_url")
-docs = loader.load()
+# Example of YouTube transcript processing
+from library.youtube_processor import process_youtube
+docs = process_youtube("your_youtube_url")
 ```
 
 ### Question Answering
 ```python
-# Initialize QA chain
-qa_chain = RetrievalQA.from_chain_type(
-    llm,
-    retriever=vectordb.as_retriever(),
-    chain_type="refine"
-)
+# Example of using the QA system
+from library.qa_processor import QAProcessor
 
-# Ask questions
-result = qa_chain.invoke({"query": "your question here"})
+qa_processor = QAProcessor()
+result = qa_processor.ask_question("your question here")
 ```
 
 ## Key Components
 
+- **Modular Architecture**: Core functionality is separated into reusable modules in the library/ directory
+- **Example Implementations**: Complete examples demonstrating different use cases in the examples/ directory
 - **Text Splitting**: Implements both RecursiveCharacterTextSplitter and CharacterTextSplitter with configurable chunk sizes and overlaps
 - **Vector Storage**: Uses ChromaDB for efficient storage and retrieval of document embeddings
 - **Question Answering**: Supports multiple chain types and custom prompt templates
