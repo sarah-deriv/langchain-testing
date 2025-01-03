@@ -38,6 +38,11 @@ langchain-testing/
 │   ├── utils.py          # Common utilities
 │   ├── vector_store_processor.py # Vector store operations
 │   └── youtube_processor.py # YouTube processing utilities
+├── tests/              # Test suite
+│   ├── __init__.py      # Test package initialization
+│   ├── conftest.py      # Test fixtures and configuration
+│   ├── test_utils.py    # Utility function tests
+│   └── test_qa_processor.py # QA processor tests
 ├── PDF-docs/            # Directory for PDF documents
 └── docs/               # Directory for ChromaDB persistence
     └── chroma/        # ChromaDB storage
@@ -53,6 +58,7 @@ langchain-testing/
 3. Create a `.env` file in the root directory with your OpenAI API key:
    ```
    OPENAI_API_KEY=your_api_key_here
+   LANGCHAIN_API_KEY=your_api_key_here
    ```
 
 ## Usage
@@ -100,5 +106,47 @@ result = qa_processor.ask_question("your question here")
 - Python 3.6+
 - OpenAI API key
 - Required Python packages (see Setup section)
+
+## Testing
+
+The project includes a comprehensive test suite to ensure reliability and maintainability. Tests are written using pytest and cover core functionalities including environment setup, QA processing, and utility functions.
+
+### Test Structure
+
+- **Fixtures (`conftest.py`)**: Provides reusable test components like mock retrievers and environment variables
+- **Utility Tests**: Tests for environment loading and configuration
+- **QA Processor Tests**: Tests for QA functionality including:
+  - Initialization and configuration
+  - Different chain types
+  - Custom prompts
+  - Error handling
+
+### Running Tests
+
+1. Install test dependencies:
+   ```bash
+   pip install -r requirements-test.txt
+   ```
+
+2. Run the test suite:
+   ```bash
+   # Run all tests
+   pytest
+
+   # Run with coverage report
+   pytest --cov=library
+
+   # Run specific test file
+   pytest tests/test_qa_processor.py
+   ```
+
+### Writing New Tests
+
+When adding new functionality:
+1. Create a new test file in the `tests/` directory
+2. Add relevant fixtures to `conftest.py` if needed
+3. Follow existing test patterns for consistency
+4. Ensure proper mocking of external dependencies
+5. Include both success and error cases
 
 This repository serves as a practical implementation of LangChain's capabilities for document processing and question answering, suitable for both learning and production use cases.
