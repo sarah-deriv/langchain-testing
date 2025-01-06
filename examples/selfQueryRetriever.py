@@ -37,7 +37,7 @@ metadata_field_info = [
 ]
 
 document_content_description = "Engineering handbook"
-llm = OpenAI(model='gpt-3.5-turbo-instruct', temperature=0)
+llm = OpenAI(model='gpt-4', temperature=0)
 retriever = SelfQueryRetriever.from_llm(
     llm,
     vectordb,
@@ -56,7 +56,7 @@ def pretty_print_docs(docs):
     print(f"\n{'-' * 100}\n".join([f"Document {i+1}:\n\n" + d.page_content for i, d in enumerate(docs)]))
 
 # Wrap our vectorstore
-llm = OpenAI(temperature=0, model="gpt-3.5-turbo-instruct")
+llm = OpenAI(temperature=0, model="gpt-4")
 compressor = LLMChainExtractor.from_llm(llm)
 compression_retriever = ContextualCompressionRetriever(
     base_compressor=compressor,

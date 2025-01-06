@@ -35,8 +35,8 @@ The system uses a combination of:
   - 1536-dimensional vectors
   - Consistent quality across various document types
 
-- **Chat: gpt-3.5-turbo**
-  - Cost-effective for chat interactions
+- **Chat: gpt-4**
+  - High-performance model for accurate chat interactions
   - Good balance of performance and speed
   - Temperature set to 0.7 for creativity while maintaining accuracy
 

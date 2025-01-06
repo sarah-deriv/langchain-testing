@@ -32,8 +32,8 @@ def create_chat_chain(vector_store: Chroma) -> ConversationalRetrievalChain:
     """
     # Initialize the language model
     llm = ChatOpenAI(
-        temperature=0.7,
-        model_name='gpt-3.5-turbo'
+        temperature=0,
+        model_name='gpt-4'
     )
     
     # Create the prompt template

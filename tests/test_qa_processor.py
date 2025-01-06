@@ -63,7 +63,7 @@ def test_init_qa_processor(mock_retriever, mock_chat_openai, mock_qa_chain):
 def test_init_qa_processor_custom_config(mock_retriever, mock_chat_openai, mock_qa_chain):
     """Test QA processor initialization with custom config."""
     config = QAConfig(
-        model_name="gpt-3.5-turbo",
+        model_name="gpt-4",
         temperature=0.7,
         chain_type="map_reduce",
         return_source_documents=False
@@ -72,7 +72,7 @@ def test_init_qa_processor_custom_config(mock_retriever, mock_chat_openai, mock_
          patch('library.qa_processor.RetrievalQA') as mock_retrieval_qa:
         mock_retrieval_qa.from_chain_type.return_value = mock_qa_chain
         processor = QAProcessor(mock_retriever, config)
-        assert processor.config.model_name == "gpt-3.5-turbo"
+        assert processor.config.model_name == "gpt-4"
         assert processor.config.temperature == 0.7
         assert processor.config.chain_type == "map_reduce"
         assert processor.config.return_source_documents is False
@@ -80,7 +80,7 @@ def test_init_qa_processor_custom_config(mock_retriever, mock_chat_openai, mock_
 def test_update_config(qa_processor, mock_chat_openai, mock_qa_chain):
     """Test updating QA processor configuration."""
     new_config = QAConfig(
-        model_name="gpt-3.5-turbo",
+        model_name="gpt-4",
         temperature=0.5,
         chain_type="refine"
     )
@@ -88,7 +88,7 @@ def test_update_config(qa_processor, mock_chat_openai, mock_qa_chain):
          patch('library.qa_processor.RetrievalQA') as mock_retrieval_qa:
         mock_retrieval_qa.from_chain_type.return_value = mock_qa_chain
         qa_processor.update_config(new_config)
-        assert qa_processor.config.model_name == "gpt-3.5-turbo"
+        assert qa_processor.config.model_name == "gpt-4"
         assert qa_processor.config.temperature == 0.5
         assert qa_processor.config.chain_type == "refine"
 

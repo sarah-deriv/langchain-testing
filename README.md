@@ -147,14 +147,3 @@ Common issues and solutions:
    - Ensure sufficient disk space for vector storage
 
 For additional support or feature requests, please open an issue in the repository.
-
-## Additional Documentation
-
-- **[QUICKSTART.md](QUICKSTART.md)**: A concise guide to get you up and running in 5 minutes
-- **[HANDOVER.md](HANDOVER.md)**: Comprehensive technical documentation covering:
-  - Architecture decisions
-  - Code structure and implementation details
-  - Development workflow
-  - Testing and maintenance strategies
-  - Security considerations
-  - Debugging tips
