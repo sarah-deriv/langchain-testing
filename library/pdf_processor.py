@@ -7,8 +7,10 @@ for text extraction, chunking, and vector store integration.
 import os
 from typing import List, Optional, Union
 from dataclasses import dataclass
+import os.path
 
 from langchain_community.document_loaders import PyPDFLoader
+from .utils import load_environment
 from langchain.text_splitter import RecursiveCharacterTextSplitter, CharacterTextSplitter
 from langchain.docstore.document import Document
 
@@ -35,6 +37,7 @@ class PDFProcessor:
     """
     
     def __init__(self, splitter_config: Optional[TextSplitterConfig] = None):
+        self.pdf_base_path = load_environment()['pdf_files_path']
         """
         Initialize the PDF processor with optional configuration.
         
@@ -64,7 +67,7 @@ class PDFProcessor:
         Load a PDF file and return its pages as documents.
         
         Args:
-            pdf_path (str): Path to the PDF file.
+            pdf_path (str): Path to the PDF file relative to PDF_FILES_PATH.
             
         Returns:
             List[Document]: List of documents, one per page.
@@ -73,10 +76,11 @@ class PDFProcessor:
             PDFProcessingError: If the PDF cannot be loaded or processed.
         """
         try:
-            if not os.path.exists(pdf_path):
-                raise PDFProcessingError(f"PDF file not found: {pdf_path}")
+            full_path = os.path.join(self.pdf_base_path, pdf_path)
+            if not os.path.exists(full_path):
+                raise PDFProcessingError(f"PDF file not found: {full_path}")
             
-            loader = PyPDFLoader(pdf_path)
+            loader = PyPDFLoader(full_path)
             return loader.load()
         except Exception as e:
             raise PDFProcessingError(f"Error loading PDF {pdf_path}: {str(e)}")
@@ -140,7 +144,7 @@ if __name__ == "__main__":
     
     try:
         # Process a single PDF
-        chunks = processor.process_pdf("PDF-docs/KYC_Data.pdf")
+        chunks = processor.process_pdf("KYC_Data.pdf")  # Now relative to PDF_FILES_PATH
         print(f"Successfully processed PDF into {len(chunks)} chunks")
         
         # Update configuration
@@ -148,7 +152,7 @@ if __name__ == "__main__":
         processor.update_config(new_config)
         
         # Process with new configuration
-        chunks = processor.process_pdf("PDF-docs/KYC_Data.pdf", use_recursive=False)
+        chunks = processor.process_pdf("KYC_Data.pdf", use_recursive=False)  # Now relative to PDF_FILES_PATH
         print(f"Successfully processed PDF into {len(chunks)} chunks with new config")
         
     except PDFProcessingError as e:

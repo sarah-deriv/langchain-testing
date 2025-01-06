@@ -11,11 +11,12 @@ def test_load_environment(mock_env_vars):
     
     assert env['openai_api_key'] == 'test-key'
     assert env['langchain_api_key'] == 'test-langchain-key'
+    assert env['pdf_files_path'] == 'test-pdf-path'
 
 def test_load_environment_missing_vars(monkeypatch):
     """Test loading environment with missing variables."""
     # Clear all relevant environment variables
-    for var in ['OPENAI_API_KEY', 'LANGCHAIN_API_KEY']:
+    for var in ['OPENAI_API_KEY', 'LANGCHAIN_API_KEY', 'PDF_FILES_PATH']:
         monkeypatch.delenv(var, raising=False)
     
     # Ensure no .env file is loaded by mocking find_dotenv to return an empty string
@@ -23,3 +24,5 @@ def test_load_environment_missing_vars(monkeypatch):
         env = load_environment()
         assert env['openai_api_key'] is None
         assert env['langchain_api_key'] is None
+        # Should default to 'PDF-docs' when not set
+        assert env['pdf_files_path'] == 'PDF-docs'

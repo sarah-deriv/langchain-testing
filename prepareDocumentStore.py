@@ -28,8 +28,9 @@ def main():
     processor = VectorStoreProcessor(config)
     
     try:
-        # Get all PDF files from PDF-docs directory
-        pdf_dir = os.path.join(current_dir, 'PDF-docs')
+        # Get PDF directory from environment variables
+        env = load_environment()
+        pdf_dir = os.path.join(current_dir, env['pdf_files_path'])
         pdf_files = [
             os.path.join(pdf_dir, f) 
             for f in os.listdir(pdf_dir) 

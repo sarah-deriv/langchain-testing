@@ -22,3 +22,4 @@ def mock_env_vars(monkeypatch):
     """Set up mock environment variables."""
     monkeypatch.setenv('OPENAI_API_KEY', 'test-key')
     monkeypatch.setenv('LANGCHAIN_API_KEY', 'test-langchain-key')
+    monkeypatch.setenv('PDF_FILES_PATH', 'test-pdf-path')
