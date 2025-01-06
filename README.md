@@ -1,152 +1,160 @@
-# LangChain Testing Repository
+# Document Chat System
 
-This repository contains a collection of Python scripts demonstrating various functionalities of LangChain for document processing, question answering, and information retrieval. The project showcases different approaches to handling documents from multiple sources and implementing intelligent question-answering systems.
+> 👉 **New Developer?** Check out [QUICKSTART.md](QUICKSTART.md) for a quick setup guide and [HANDOVER.md](HANDOVER.md) for detailed technical documentation.
 
-## Features
+This project implements a document-based chat system using LangChain and OpenAI's language models. It allows users to interact with their PDF documents through natural language queries, leveraging vector embeddings for efficient document retrieval and GPT models for generating contextual responses.
 
-- **Document Processing**
-  - PDF document reading and processing with configurable text splitting
-  - YouTube video transcript extraction and processing
-  - Vector store implementation for efficient document storage
-  
-- **Question Answering**
-  - Implementation of question-answering systems using GPT-4
-  - Retrieval-based question answering with customizable prompts
-  - Support for different chain types (map_reduce, refine)
-  - Similarity search functionality
+## Overview
 
-- **Vector Store**
-  - Document embedding using OpenAI embeddings
-  - Efficient similarity search with ChromaDB
-  - Persistent storage of embeddings
+The system consists of two main components:
+1. Document Preparation (`prepareDocumentStore.py`): Processes PDF documents and creates a vector store
+2. Interactive Chat (`chatWithDocuments.py`): Enables natural language interaction with the processed documents
 
-## Repository Structure
-
-```
-langchain-testing/
-├── chat.py                # Main chat interface
-├── retrieval.py          # Document retrieval implementation
-├── selfQueryRetriever.py # Self-query retrieval system
-├── examples/            # Example implementations
-│   ├── pdf_example.py    # PDF processing example
-│   ├── qa_example.py     # Question answering example
-│   ├── vector_store_example.py  # Vector store usage
-│   └── youtube_example.py # YouTube processing example
-├── library/             # Core functionality modules
-│   ├── pdf_processor.py   # PDF processing utilities
-│   ├── qa_processor.py    # QA system implementation
-│   ├── utils.py          # Common utilities
-│   ├── vector_store_processor.py # Vector store operations
-│   └── youtube_processor.py # YouTube processing utilities
-├── tests/              # Test suite
-│   ├── __init__.py      # Test package initialization
-│   ├── conftest.py      # Test fixtures and configuration
-│   ├── test_utils.py    # Utility function tests
-│   └── test_qa_processor.py # QA processor tests
-├── PDF-docs/            # Directory for PDF documents
-└── docs/               # Directory for ChromaDB persistence
-    └── chroma/        # ChromaDB storage
-```
+This implementation is based on the LangChain course: [Chat with Your Data](https://learn.deeplearning.ai/courses/langchain-chat-with-your-data)
 
 ## Setup
 
 1. Clone the repository
-2. Install required dependencies:
-   ```bash
-   pip install langchain langchain_openai langchain_community langchain_chroma openai python-dotenv
-   ```
-3. Create a `.env` file in the root directory with your OpenAI API key:
-   ```
-   OPENAI_API_KEY=your_api_key_here
-   LANGCHAIN_API_KEY=your_api_key_here
-   ```
+2. Install dependencies:
+```bash
+pip install -r requirements-test.txt
+```
+3. Set up your environment variables (see Environment Variables section)
+4. Place your PDF documents in the PDF-docs directory
+5. Run the document preparation script
+6. Start chatting with your documents
+
+## Environment Variables
+
+Create a `.env` file in the root directory with the following variables:
+
+```
+OPENAI_API_KEY=your_openai_api_key
+pdf_files_path=PDF-docs
+```
+
+- `OPENAI_API_KEY`: Your OpenAI API key (required for embeddings and chat)
+- `pdf_files_path`: Directory path where PDF files are stored (default: PDF-docs)
+
+## File Structure
+
+```
+langchain-testing/
+├── PDF-docs/           # Store your PDF files here
+├── docs/
+│   └── chroma/        # Vector store data
+├── prepareDocumentStore.py
+├── chatWithDocuments.py
+└── library/           # Helper modules
+```
+
+## Main Components
+
+### 1. Document Preparation (prepareDocumentStore.py)
+
+This script processes PDF documents and creates a searchable vector store:
+
+- Loads PDF files from the specified directory
+- Splits documents into chunks (default: 1000 tokens with 100 token overlap)
+- Creates embeddings using OpenAI's text-embedding-ada-002 model
+- Stores the vectors in a Chroma database
+
+Configuration:
+```python
+chunk_size=1000        # Size of text chunks
+chunk_overlap=100      # Overlap between chunks
+embedding_model="text-embedding-ada-002"
+```
+
+### 2. Chat Interface (chatWithDocuments.py)
+
+Provides an interactive chat interface to query your documents:
+
+- Uses GPT-3.5-turbo for generating responses
+- Maintains conversation history for context
+- Retrieves relevant document chunks based on similarity search
+- Generates contextual responses based on retrieved information
+
+Features:
+- Similarity search with top-3 chunk retrieval
+- Conversation memory for follow-up questions
+- Temperature setting of 0.7 for balanced creativity
+- Built-in error handling and graceful exits
 
 ## Usage
 
-### Main Chat Interface
-```python
-# Use the main chat interface
-python chat.py
+1. **Prepare Your Documents**:
+   - Place your PDF files in the `PDF-docs` directory
+   - Run the document preparation script:
+     ```bash
+     python prepareDocumentStore.py
+     ```
+   - The script will process all PDFs and create a vector store
+
+2. **Chat with Your Documents**:
+   - Start the chat interface:
+     ```bash
+     python chatWithDocuments.py
+     ```
+   - Type your questions naturally
+   - Type 'exit' to end the conversation
+
+Example Interaction:
+```
+=== Document Chat System ===
+Chat initialized! Type 'exit' to end the conversation.
+You can now ask questions about the documents.
+
+You: What are the main topics covered in the documents?
+Assistant: [AI-generated response based on your documents]
+
+You: Can you elaborate on [specific topic]?
+Assistant: [Context-aware response considering chat history]
 ```
 
-### PDF Processing
-```python
-# Example of PDF document processing
-from library.pdf_processor import process_pdf
-docs = process_pdf("PDF-docs/your_document.pdf")
-```
+## Best Practices
 
-### YouTube Transcript Processing
-```python
-# Example of YouTube transcript processing
-from library.youtube_processor import process_youtube
-docs = process_youtube("your_youtube_url")
-```
+1. **Document Preparation**:
+   - Ensure PDFs are text-searchable (not scanned images)
+   - Use descriptive filenames
+   - Keep PDFs in the designated PDF-docs directory
 
-### Question Answering
-```python
-# Example of using the QA system
-from library.qa_processor import QAProcessor
+2. **Querying**:
+   - Ask specific questions for better results
+   - Provide context in your questions
+   - Use follow-up questions to drill down into topics
 
-qa_processor = QAProcessor()
-result = qa_processor.ask_question("your question here")
-```
+3. **System Management**:
+   - Regularly update your vector store when adding new documents
+   - Monitor your OpenAI API usage
+   - Back up your vector store (docs/chroma directory) periodically
 
-## Key Components
+## Troubleshooting
 
-- **Modular Architecture**: Core functionality is separated into reusable modules in the library/ directory
-- **Example Implementations**: Complete examples demonstrating different use cases in the examples/ directory
-- **Text Splitting**: Implements both RecursiveCharacterTextSplitter and CharacterTextSplitter with configurable chunk sizes and overlaps
-- **Vector Storage**: Uses ChromaDB for efficient storage and retrieval of document embeddings
-- **Question Answering**: Supports multiple chain types and custom prompt templates
-- **Document Processing**: Handles both PDF documents and YouTube video transcripts
+Common issues and solutions:
 
-## Environment Requirements
+1. **OpenAI API Key Error**:
+   - Ensure your `.env` file exists and contains the correct API key
+   - Check if the API key has sufficient credits
 
-- Python 3.6+
-- OpenAI API key
-- Required Python packages (see Setup section)
+2. **PDF Loading Issues**:
+   - Verify PDF files are in the correct directory
+   - Ensure PDFs are not corrupted or password-protected
+   - Check file permissions
 
-## Testing
+3. **Vector Store Errors**:
+   - Delete the docs/chroma directory and rebuild if corruption occurs
+   - Ensure sufficient disk space for vector storage
 
-The project includes a comprehensive test suite to ensure reliability and maintainability. Tests are written using pytest and cover core functionalities including environment setup, QA processing, and utility functions.
+For additional support or feature requests, please open an issue in the repository.
 
-### Test Structure
+## Additional Documentation
 
-- **Fixtures (`conftest.py`)**: Provides reusable test components like mock retrievers and environment variables
-- **Utility Tests**: Tests for environment loading and configuration
-- **QA Processor Tests**: Tests for QA functionality including:
-  - Initialization and configuration
-  - Different chain types
-  - Custom prompts
-  - Error handling
-
-### Running Tests
-
-1. Install test dependencies:
-   ```bash
-   pip install -r requirements-test.txt
-   ```
-
-2. Run the test suite:
-   ```bash
-   # Run all tests
-   pytest
-
-   # Run with coverage report
-   pytest --cov=library
-
-   # Run specific test file
-   pytest tests/test_qa_processor.py
-   ```
-
-### Writing New Tests
-
-When adding new functionality:
-1. Create a new test file in the `tests/` directory
-2. Add relevant fixtures to `conftest.py` if needed
-3. Follow existing test patterns for consistency
-4. Ensure proper mocking of external dependencies
-5. Include both success and error cases
-
-This repository serves as a practical implementation of LangChain's capabilities for document processing and question answering, suitable for both learning and production use cases.
+- **[QUICKSTART.md](QUICKSTART.md)**: A concise guide to get you up and running in 5 minutes
+- **[HANDOVER.md](HANDOVER.md)**: Comprehensive technical documentation covering:
+  - Architecture decisions
+  - Code structure and implementation details
+  - Development workflow
+  - Testing and maintenance strategies
+  - Security considerations
+  - Debugging tips
