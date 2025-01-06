@@ -93,9 +93,12 @@ def main():
     
     try:
         # Load multiple PDF documents
+        # Load documents
         pdf_dir = os.path.join(os.path.dirname(current_dir), 'PDF-docs')
         pdf_files = [
-            os.path.join(pdf_dir, f"Engineering{i}.pdf") for i in range(1, 7)
+            os.path.join(pdf_dir, f) 
+            for f in os.listdir(pdf_dir) 
+            if f.lower().endswith('.pdf')
         ]
         
         # Load all documents

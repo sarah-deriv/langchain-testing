@@ -21,7 +21,7 @@ def main():
     
     try:
         # Load and process a PDF
-        chunks = processor.process_pdf("PDF-docs/KYC_Data.pdf")
+        chunks = processor.process_pdf("PDF-docs/CFDs - General.pdf")
         print(f"Processed PDF into {len(chunks)} chunks")
         
         # Print first chunk content

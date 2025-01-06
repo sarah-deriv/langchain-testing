@@ -219,8 +219,8 @@ if __name__ == "__main__":
     try:
         # Load sample documents
         loaders = [
-            PyPDFLoader("PDF-docs/Engineering1.pdf"),
-            PyPDFLoader("PDF-docs/Engineering2.pdf")
+            PyPDFLoader("PDF-docs/CFDs - General.pdf"),
+            PyPDFLoader("PDF-docs/CFDs - Zero Spread.pdf")
         ]
         docs = []
         for loader in loaders:

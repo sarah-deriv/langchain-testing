@@ -14,10 +14,12 @@ from vector_store_processor import VectorStoreProcessor, VectorStoreConfig
 from utils import load_environment
 from langchain_community.document_loaders import PyPDFLoader
 
+question = "What is a zero-spread account?"
+
 def demonstrate_basic_qa(processor: QAProcessor):
     """Demonstrate basic QA operations."""
     # Basic question answering
-    question = "What is a swap-free account?"
+    
     print(f"\nBasic question: '{question}'")
     result = processor.ask(question)
     print(f"Answer: {result['result']}")
@@ -29,7 +31,6 @@ def demonstrate_basic_qa(processor: QAProcessor):
 
 def demonstrate_advanced_qa(processor: QAProcessor):
     """Demonstrate advanced QA features."""
-    question = "what is a zero spread account?"
     
     # Using concise prompt
     print(f"\n1. Using concise prompt for: '{question}'")
@@ -68,7 +69,9 @@ def main():
         # Load documents
         pdf_dir = os.path.join(os.path.dirname(current_dir), 'PDF-docs')
         pdf_files = [
-            os.path.join(pdf_dir, f"Engineering{i}.pdf") for i in range(1, 7)
+            os.path.join(pdf_dir, f) 
+            for f in os.listdir(pdf_dir) 
+            if f.lower().endswith('.pdf')
         ]
         
         docs = []
