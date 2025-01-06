@@ -59,7 +59,7 @@ def create_chat_chain(vector_store: Chroma) -> ConversationalRetrievalChain:
         ),
         condense_question_prompt=condense_question_prompt,
         combine_docs_chain_kwargs={"prompt": qa_prompt},
-        return_source_documents=True,
+        return_source_documents=False,
         verbose=True
     )
     
@@ -117,12 +117,12 @@ def chat_with_documents():
                     AIMessage(content=answer)
                 ])
                 
-                # Print source documents if available
-                if response.get('source_documents'):
-                    print("\nSources:")
-                    for i, doc in enumerate(response['source_documents'], 1):
-                        print(f"{i}. {doc.metadata.get('source', 'Unknown source')}")
-                print("\n" + "-"*50 + "\n")
+                # # Print source documents if available
+                # if response.get('source_documents'): # in debug mode
+                #     print("\nSources:") # in debug mode
+                #     for i, doc in enumerate(response['source_documents'], 1): # in debug mode
+                #         print(f"{i}. {doc.metadata.get('source', 'Unknown source')}") # in debug mode
+                # print("\n" + "-"*50 + "\n") # in debug mode
                 
             except Exception as e:
                 print(f"An error occurred: {str(e)}")
